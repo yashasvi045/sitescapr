@@ -1,267 +1,67 @@
-# 🗺️ SiteScapr — AI-Powered Business Location Recommender for Kolkata
+# SiteScapr
 
-> SiteScapr helps business owners find the **best locations** in Kolkata to set up their business using AI-driven analysis, weighted scoring, and interactive map visualization.
+**Stop guessing. Start deciding.**
 
----
-
-## 🚀 Features
-
-- 📍 **Smart Location Recommendations** — ranked results based on business type, foot traffic, competition, and more
-- 🤖 **AI Reasoning Engine** — natural language justifications for each recommended location
-- 🗺️ **Interactive Map** — built with React Leaflet, visualizing top-ranked spots with markers and charts
-- ⚡ **Fast API Backend** — lightweight Python-based API with a scoring engine using weighted formulas
-- 📦 **SQLite Database** — persistent storage for neighbourhood indices, auto-seeded on startup
-- 🔄 **n8n Automation Pipeline** — runs every 12 hours, fetches NewsAPI headlines for all 15 Kolkata areas, uses Groq LLaMA 3.1 to produce scoring deltas, and auto-updates the live indices
+SiteScapr is a location intelligence platform that tells business owners exactly where in Kolkata to open their next venture. Enter your business type, target demographic, and monthly budget. SiteScapr scores every major neighbourhood, ranks your top options, and explains the reasoning — in under three seconds.
 
 ---
 
-## 🏗️ System Architecture
+## What It Does
 
-```
-👤 Business Owner
-        │
-        ▼
-┌─────────────────────────────────────┐
-│           Frontend                  │
-│  Next.js 14 · TypeScript · Tailwind │
-│  React Leaflet Map                  │
-└────────────────┬────────────────────┘
-                 │  POST /analyze
-                 ▼
-┌─────────────────────────────────────┐
-│            Backend                  │
-│       FastAPI · Python 3.11         │
-└──────────┬──────────────────────────┘
-           │
-           ▼
-   📊 Scoring Engine   🗄️ SQLite DB
-   (Weighted Formula)  (live indices)
-           │                 ▲
-           ▼                 │ POST /internal/update-indices
-   🥇 Ranked Results + Map   │
-                     ┌───────┴──────────────────────────┐
-                     │      n8n Automation Pipeline      │
-                     │  ⏰ Every 12 h                    │
-                     │  🗞️  NewsAPI (15 neighbourhoods)  │
-                     │  🤖 Groq LLaMA 3.1 (deltas)      │
-                     └──────────────────────────────────┘
-```
+Choosing a location is one of the highest-stakes decisions a business makes. Most owners rely on intuition, word of mouth, or a single site visit. SiteScapr replaces guesswork with a structured, data-driven score built from nine signals: income levels, foot traffic, competition density, commercial rent, population density, accessibility, area growth trend, vacancy improvement, and infrastructure investment.
 
-## ⚙️ Getting Started
-
-**Prerequisites:** Node.js 18+ · Python 3.11+
-
-```bash
-# Clone
-git clone https://github.com/yashasvi045/diversion2k26
-
-
-# Backend
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload        # → http://localhost:8000
-
-# Frontend (new terminal)
-cd frontend
-npm install
-npm run dev                      # → http://localhost:3000
-```
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js 14, TypeScript, Tailwind CSS |
-| Map | React Leaflet |
-| Backend | FastAPI, Python 3.11 |
-| Database | SQLite (via SQLAlchemy) |
-| AI Engine | Groq LLaMA 3.1-8b (scoring deltas) |
-| Scoring | Custom Weighted Formula Engine |
-| Automation | n8n workflow (News Index Pipeline) |
-| News Data | NewsAPI.org |
+Every score is tailored to your business category. A restaurant is weighted differently from a tech office. A cafe is weighted differently from a supermarket. The result is a ranked shortlist that reflects how each neighbourhood actually performs for your specific business — not a generic popularity ranking.
 
 ---
 
-## 📁 Project Structure
+## Key Features
 
-```
-sitescapr/
-├── frontend/
-│   ├── app/                  # Next.js App Router pages
-│   ├── components/
-│   │   └── MapView.tsx       # React Leaflet map component
-│   └── tailwind.config.ts
-├── backend/
-│   ├── main.py               # FastAPI entry point
-│   ├── scoring_engine.py     # Weighted formula logic
-│   ├── ai_engine.py          # AI reasoning integration
-│   └── data/
-│       └── locations.json    # Mock dataset for Kolkata
-└── README.md
-```
+**Neighbourhood Rankings**
+The top five locations for your business are ranked by a composite Location Score. Each result includes a breakdown of demand, friction, and growth components so you understand exactly what is driving the recommendation.
 
----
+**Interactive Map**
+Results appear on a live Kolkata map with score-coloured overlays. Compare locations visually alongside the numbers.
 
-## ⚙️ Getting Started
+**AI-Generated Reasoning**
+Each recommendation includes three plain-language bullet points explaining why that neighbourhood ranked where it did — written specifically for your business type and budget.
 
-### Prerequisites
+**Live Data, Refreshed Every 12 Hours**
+An automated pipeline monitors local news for every tracked neighbourhood, interprets signals using AI, and updates the scoring indices twice a day. Every analysis you run reflects current conditions.
 
-- Node.js 18+
-- Python 3.11+
-- pip
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/sitescapr.git
-cd sitescapr
-```
-
-### 2. Start the Backend
-
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-Backend runs at `http://localhost:8000`
-
-### 3. Start the Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend runs at `http://localhost:3000`
+**Budget Filtering**
+Locations that exceed your monthly budget are automatically excluded. You only see options that are financially viable for your situation.
 
 ---
 
-## 🔌 API Reference
+## How the Score Is Calculated
 
-### `POST /analyze`
+Each neighbourhood is evaluated across three dimensions:
 
-Analyzes and returns ranked location recommendations.
+- **Demand** — How much genuine customer opportunity exists in the area (income levels, foot traffic, population density).
+- **Friction** — What works against you (competition, rent costs, accessibility).
+- **Growth** — Whether the area is improving (development trends, vacancy improvements, infrastructure investment).
 
-**Request Body:**
-```json
-{
-  "business_type": "cafe",
-  "budget": "medium",
-  "target_audience": "students"
-}
-```
-
-**Response:**
-```json
-{
-  "results": [
-    {
-      "rank": 1,
-      "location": "Salt Lake Sector V",
-      "score": 87.4,
-      "reason": "High footfall from IT professionals and students...",
-      "coordinates": [22.5726, 88.4272]
-    }
-  ]
-}
-```
+The final Location Score weighs demand at 40%, subtracts friction at 35%, and adds growth at 25%. All inputs are normalised before scoring. Business-type profiles adjust the internal weights so the formula reflects the priorities of your specific category — twelve profiles in total, from restaurants and cafes to medical clinics and tech offices.
 
 ---
 
-## 🗃️ Dataset
+## Pricing
 
-The scoring indices are stored in SQLite and seeded from `backend/app/seed.py` on first run. They cover all 15 major Kolkata localities and track:
-
-- Foot traffic proxy
-- Competition index
-- Commercial rent index
-- Income index
-- Population density index
-- Area growth trend
-- Infrastructure investment index
-- Vacancy rate
-- Accessibility penalty
+| Plan | Price | Includes |
+|---|---|---|
+| Free | No charge | First analysis |
+| Pro | INR 599 / month | Unlimited analyses, full score breakdowns, comparison view |
 
 ---
 
-## 🔄 n8n Automation Pipeline
+## Tech Stack
 
-The file `n8n_workflow.json` is an importable n8n workflow called **SiteScapr News Index Pipeline**.
-
-### What it does
-
-| Step | Node | Action |
-|------|------|---------|
-| 1 | Schedule Trigger | Fires every 12 hours |
-| 2 | Generate Area List | Emits one item per neighbourhood (15 total) |
-| 3 | Fetch NewsAPI | Queries the last 7 days of news for each area |
-| 4 | Format News | Builds a concise text digest (up to 10 headlines) |
-| 5 | Build Groq Request | Constructs the LLM prompt asking for scoring deltas |
-| 6 | Call Groq | Sends to `llama-3.1-8b-instant` via Groq API |
-| 7 | Parse Deltas | Validates and clamps 9 delta values to `[-10, +10]` |
-| 8 | Update FastAPI | POSTs deltas to `/internal/update-indices` on the backend |
-
-### How to import
-
-1. Start n8n (`npx n8n` or via Docker: `docker-compose up n8n`)
-2. In the n8n UI, go to **Workflows → Import from file**
-3. Select `n8n_workflow.json`
-4. Set the `PIPELINE_SECRET` credential to `sitescapr_pipeline_2026`
-5. Activate the workflow
-
-> The workflow targets `http://host.docker.internal:8000` — change to `http://localhost:8000` if running n8n outside Docker.
+Built on Next.js, FastAPI, and SQLAlchemy, with Clerk for authentication, Razorpay for payments, and Groq LLaMA 3.1 powering the automated index updates.
 
 ---
 
-## 🛣️ Roadmap
+## License
 
-- [x] MVP with mock JSON dataset
-- [x] FastAPI backend with scoring engine
-- [x] SQLite database with live scoring indices
-- [x] React Leaflet map visualization
-- [x] n8n automation pipeline (news-driven index updates via Groq AI)
-- [ ] PostgreSQL migration for production
-- [ ] User authentication & saved searches
-- [ ] Mobile app (React Native)
+This repository is publicly visible for reference and evaluation purposes only. All rights are reserved by the authors. No part of this codebase may be copied, modified, distributed, sublicensed, or used in any form — commercial or otherwise — without explicit prior written permission from the authors.
 
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please open an issue first to discuss what you'd like to change.
-
-```bash
-git checkout -b feature/your-feature-name
-git commit -m "Add your feature"
-git push origin feature/your-feature-name
-```
-
-Then open a Pull Request.
-
----
-## 🔮 Future Scope
-
-- Real-time municipal API integration
-- Machine learning model for demand prediction
-- Multi-city expansion
-- User accounts + saved reports
-- SaaS subscription model
-
-## 🏅 Why SiteScapr?
-
-✔ Data-driven  
-✔ Customizable scoring  
-✔ AI-powered reasoning  
-✔ Interactive map visualization  
-✔ Built for emerging markets
-
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
-![n8n](https://img.shields.io/badge/n8n-Automation-orange)
-![Groq](https://img.shields.io/badge/Groq-LLaMA_3.1-purple)
-
+To request permission, please open an issue or contact the repository owners directly.
