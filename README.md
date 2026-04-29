@@ -31,9 +31,9 @@ Locations that exceed your monthly budget are automatically excluded. You only s
 
 Each neighbourhood is evaluated across three dimensions:
 
-- **Demand** — How much genuine customer opportunity exists in the area (income levels, foot traffic, population density).
-- **Friction** — What works against you (competition, rent costs, accessibility).
-- **Growth** — Whether the area is improving (development trends, vacancy improvements, infrastructure investment).
+- **Demand**: How much genuine customer opportunity exists in the area (income levels, foot traffic, population density).
+- **Friction**: What works against you (competition, rent costs, accessibility).
+- **Growth**: Whether the area is improving (development trends, vacancy improvements, infrastructure investment).
 
 The final Location Score weighs demand at 40%, subtracts friction at 35%, and adds growth at 25%. All inputs are normalised before scoring. Business-type profiles adjust the internal weights so the formula reflects the priorities of your specific category: twelve profiles in total, from restaurants and cafes to medical clinics and tech offices.
 
@@ -44,13 +44,9 @@ The final Location Score weighs demand at 40%, subtracts friction at 35%, and ad
 | Free | No charge | First analysis |
 | Pro | INR 299 / month | Unlimited analyses, full score breakdowns, comparison view |
 
----
-
 ## Tech Stack
 
 Built on Next.js, FastAPI, and SQLAlchemy, with Clerk for authentication, Razorpay for payments, and Groq LLaMA 3.1 powering the automated index updates.
-
----
 
 ## License
 
