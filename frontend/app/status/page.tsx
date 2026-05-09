@@ -11,6 +11,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+
 type StatusLevel = "operational" | "degraded" | "down" | "checking";
 
 interface ServiceStatus {
@@ -112,7 +114,7 @@ export default function StatusPage() {
     // ── API health ──
     const start = performance.now();
     try {
-      const res = await fetch("http://localhost:8000/", {
+      const res = await fetch(`${BACKEND}/`, {
         signal: AbortSignal.timeout(5000),
       });
       const latency = Math.round(performance.now() - start);
@@ -128,13 +130,13 @@ export default function StatusPage() {
       }
     } catch {
       setApiStatus("down");
-      setApiDetail("Cannot reach backend at localhost:8000 - is it running?");
+      setApiDetail(`Cannot reach backend at ${BACKEND}`);
     }
 
     // ── Pipeline health ──
     const pStart = performance.now();
     try {
-      const pRes = await fetch("http://localhost:8000/pipeline/last-run", {
+      const pRes = await fetch(`${BACKEND}/pipeline/last-run`, {
         signal: AbortSignal.timeout(5000),
       });
       const pLatency = Math.round(performance.now() - pStart);

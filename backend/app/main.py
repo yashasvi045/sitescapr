@@ -24,9 +24,21 @@ from .database import init_db, get_areas, apply_delta, get_last_pipeline_run
 
 load_dotenv()
 
+
+def _parse_cors_origins() -> list[str]:
+    """Parse comma-separated CORS origins from env with sensible defaults."""
+    raw = os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:3000,https://sitescapr.vercel.app",
+    )
+    origins = [o.strip().rstrip("/") for o in raw.split(",") if o.strip()]
+    return origins or ["http://localhost:3000"]
+
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
 rzp_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+CORS_ORIGINS = _parse_cors_origins()
+ALLOW_ALL_ORIGINS = CORS_ORIGINS == ["*"]
 
 app = FastAPI(
     title="SiteScapr API",
@@ -37,9 +49,9 @@ app = FastAPI(
 # ── CORS ──────────────────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_origins=CORS_ORIGINS,
+    allow_credentials=not ALLOW_ALL_ORIGINS,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
 )
 

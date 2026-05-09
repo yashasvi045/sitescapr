@@ -16,6 +16,8 @@ import ExplanationDrawer from "@/components/ExplanationDrawer";
 import { useProStatus } from "@/lib/useProStatus";
 import type { ScoredArea, AnalyzeResponse } from "@/lib/types";
 
+const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+
 // Dynamic import to prevent Leaflet SSR issues (Leaflet requires `window`)
 const MapView = dynamic(() => import("@/components/MapView"), {
   ssr: false,
@@ -56,7 +58,7 @@ export default function AppPage() {
       setBusinessType(params.business_type);
 
       try {
-        const res = await fetch("http://localhost:8000/analyze", {
+        const res = await fetch(`${BACKEND}/analyze`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(params),
@@ -77,7 +79,7 @@ export default function AppPage() {
         if (err instanceof Error) {
           setError(err.message);
         } else {
-          setError("Unexpected error. Is the backend running on port 8000?");
+          setError(`Unexpected error. Is the backend reachable at ${BACKEND}?`);
         }
       } finally {
         setIsLoading(false);
