@@ -51,3 +51,6 @@ n8n_workflow.json
 *.db
 *.db-shm
 *.db-wal
+
+# Local-only deployment notes (do not commit)
+verceldeploy.md
