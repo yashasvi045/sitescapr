@@ -45,7 +45,7 @@ const stats = [
 
 const pipelineSteps = [
   { label: "Data Signals", description: "Real-world signals are continuously gathered for each neighbourhood" },
-  { label: "AI Analysis", description: "Signals are interpreted and translated into meaningful scoring changes" },
+  { label: "AI Analysis", description: "Signals are interpreted and translated into meaningful scores" },
   { label: "Score Update", description: "The backend quietly adjusts indices to reflect current conditions" },
   { label: "Your Results", description: "Every analysis you run is grounded in up-to-date neighbourhood data" },
 ];
