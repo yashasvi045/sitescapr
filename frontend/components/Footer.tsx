@@ -65,7 +65,7 @@ export default function Footer() {
           </p>
           <p className="text-xs text-gray-400">
             Built for{" "}
-            <span className="font-semibold text-gray-500">Igniters Tank 2k26</span>
+            <span className="font-semibold text-gray-500">MSMEs & More</span>
           </p>
         </div>
       </div>
