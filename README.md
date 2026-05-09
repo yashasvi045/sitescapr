@@ -48,47 +48,6 @@ The final Location Score weighs demand at 40%, subtracts friction at 35%, and ad
 
 Built on Next.js, FastAPI, and SQLAlchemy, with Clerk for authentication, Razorpay for payments, and Groq LLaMA 3.1 powering the automated index updates.
 
-## Deploy Backend
-
-The frontend is live on Vercel. Deploy the FastAPI backend as a separate service (Render, Railway, Fly.io, etc.) from the `backend/` directory.
-
-Recommended settings for a Python web service:
-
-- Build command: `pip install -r requirements.txt`
-- Start command: `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-- Root directory: `backend`
-
-Set these environment variables on the backend host:
-
-- `RAZORPAY_KEY_ID`
-- `RAZORPAY_KEY_SECRET`
-- `PIPELINE_SECRET`
-- `CORS_ORIGINS=https://sitescapr.vercel.app`
-- `DATABASE_URL` (optional but recommended for persistent Postgres)
-
-After backend deploy, set this on Vercel frontend project and redeploy:
-
-- `NEXT_PUBLIC_BACKEND_URL=https://<your-backend-domain>`
-
-## Run n8n Pipeline Live
-
-Your frontend and backend can be deployed separately, while n8n runs as a scheduled worker.
-
-1. Host n8n on a persistent service (Railway, Render, Fly.io, or n8n Cloud).
-2. Import [n8n_workflow.json](n8n_workflow.json) into n8n.
-3. Configure runtime env vars (see [n8n.env.example](n8n.env.example)):
-	- `SITESCAPR_BACKEND_URL=https://<your-backend-domain>`
-	- `PIPELINE_SECRET=<same value as backend PIPELINE_SECRET>`
-	- `NEWSAPI_KEY=<your_newsapi_key>`
-	- `GROQ_API_KEY=<your_groq_key>`
-4. Enable the workflow (it runs every 12 hours via Schedule Trigger).
-5. Verify the pipeline from your app status page (`/status`) or API endpoint:
-	- `GET /pipeline/last-run`
-
-Important:
-- Rotate any previously hardcoded keys/secrets if they were committed.
-- Keep backend CORS allowing only your production frontend domains.
-
 ## License
 
 This repository is publicly visible for reference and evaluation purposes only. All rights are reserved by the authors. No part of this codebase may be copied, modified, distributed, sublicensed, or used in any form, commercial or otherwise without explicit prior written permission from the authors. To request permission, please open an issue or contact the repository owners directly.
