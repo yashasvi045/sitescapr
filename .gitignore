@@ -54,3 +54,6 @@ n8n_workflow.json
 
 # Local-only deployment notes (do not commit)
 verceldeploy.md
+
+# Technical & Non Technical Notes
+questions.md
