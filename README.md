@@ -42,7 +42,7 @@ The final Location Score weighs demand at 40%, subtracts friction at 35%, and ad
 | Plan | Price | Includes |
 |---|---|---|
 | Free | No charge | First analysis |
-| Pro | INR 299 / month | Unlimited analyses, full score breakdowns, comparison view |
+| Pro | INR 599 | Unlimited analyses, full score breakdowns, comparison view |
 
 ## Tech Stack
 
